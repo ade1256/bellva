@@ -10,6 +10,7 @@ use App\Models\Expense\Bill;
 use App\Models\Expense\BillPayment;
 use App\Models\Expense\Payment;
 use App\Models\Setting\Category;
+use DB;
 use Charts;
 use Date;
 
@@ -192,5 +193,143 @@ class ProfitLoss extends Controller
                 $totals['total']['amount'] -= $amount;
             }
         }
+    }
+
+    public function neraca(){
+        $dates = $totals = $compares = $categories = [];
+
+        $status = request('status');
+        $year = request('year', Date::now()->year);
+
+        $income_categories = Category::enabled()->type('income')->orderBy('name')->pluck('name', 'id')->toArray();
+
+        $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
+
+        // Dates
+        for ($j = 1; $j <= 12; $j++) {
+            $dates[$j] = Date::parse($year . '-' . $j)->quarter;
+
+            // Totals
+            $totals[$dates[$j]] = array(
+                'amount' => 0,
+                'currency_code' => setting('general.default_currency'),
+                'currency_rate' => 1
+            );
+
+            foreach ($income_categories as $category_id => $category_name) {
+                $compares['income'][$category_id][$dates[$j]] = [
+                    'category_id' => $category_id,
+                    'name' => $category_name,
+                    'amount' => 0,
+                    'currency_code' => setting('general.default_currency'),
+                    'currency_rate' => 1
+                ];
+            }
+
+            foreach ($expense_categories as $category_id => $category_name) {
+                $compares['expense'][$category_id][$dates[$j]] = [
+                    'category_id' => $category_id,
+                    'name' => $category_name,
+                    'amount' => 0,
+                    'currency_code' => setting('general.default_currency'),
+                    'currency_rate' => 1
+                ];
+            }
+
+            $j += 2;
+        }
+
+        $totals['total'] = [
+            'amount' => 0,
+            'currency_code' => setting('general.default_currency'),
+            'currency_rate' => 1
+        ];
+
+        $gross['income'] = $gross['expense'] = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 'total' => 0];
+
+        foreach ($income_categories as $category_id => $category_name) {
+            $compares['income'][$category_id]['total'] = [
+                'category_id' => $category_id,
+                'name' => trans_choice('general.totals', 1),
+                'amount' => 0,
+                'currency_code' => setting('general.default_currency'),
+                'currency_rate' => 1
+            ];
+        }
+
+        foreach ($expense_categories as $category_id => $category_name) {
+            $compares['expense'][$category_id]['total'] = [
+                'category_id' => $category_id,
+                'name' => trans_choice('general.totals', 1),
+                'amount' => 0,
+                'currency_code' => setting('general.default_currency'),
+                'currency_rate' => 1
+            ];
+        }
+
+        // Invoices
+        switch ($status) {
+            case 'paid':
+                $invoices = InvoicePayment::monthsOfYear('paid_at')->get();
+                $this->setAmount($totals, $compares, $invoices, 'invoice', 'paid_at');
+                break;
+            case 'upcoming':
+                $invoices = Invoice::accrued()->monthsOfYear('due_at')->get();
+                $this->setAmount($totals, $compares, $invoices, 'invoice', 'due_at');
+                break;
+            default:
+                $invoices = Invoice::accrued()->monthsOfYear('invoiced_at')->get();
+                $this->setAmount($totals, $compares, $invoices, 'invoice', 'invoiced_at');
+                break;
+        }
+
+        // Revenues
+        if ($status != 'upcoming') {
+            $revenues = Revenue::monthsOfYear('paid_at')->isNotTransfer()->get();
+            $this->setAmount($totals, $compares, $revenues, 'revenue', 'paid_at');
+        }
+
+        // Bills
+        switch ($status) {
+            case 'paid':
+                $bills = BillPayment::monthsOfYear('paid_at')->get();
+                $this->setAmount($totals, $compares, $bills, 'bill', 'paid_at');
+                break;
+            case 'upcoming':
+                $bills = Bill::accrued()->monthsOfYear('due_at')->get();
+                $this->setAmount($totals, $compares, $bills, 'bill', 'due_at');
+                break;
+            default:
+                $bills = Bill::accrued()->monthsOfYear('billed_at')->get();
+                $this->setAmount($totals, $compares, $bills, 'bill', 'billed_at');
+                break;
+        }
+        
+        // Payments
+        if ($status != 'upcoming') {
+            $payments = Payment::monthsOfYear('paid_at')->isNotTransfer()->get();
+            $this->setAmount($totals, $compares, $payments, 'payment', 'paid_at');
+        }
+
+        $statuses = collect([
+            'all' => trans('general.all'),
+            'paid' => trans('invoices.paid'),
+            'upcoming' => trans('general.upcoming'),
+        ]);
+
+         // Check if it's a print or normal request
+         if (request('print')) {
+            $view_template = 'reports.balance_sheet.print';
+        } else {
+            $view_template = 'reports.balance_sheet.index';
+        }
+
+        $tb_invoices = DB::table('invoices')->get();
+        $tb_revenues = DB::table('revenues')->get();
+        $tb_bills = DB::table('bills')->get();
+        $tb_payments = DB::table('payments')->get();
+
+
+        return view($view_template,compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses', 'tb_invoices', 'tb_revenues', 'tb_bills', 'tb_payments'));
     }
 }

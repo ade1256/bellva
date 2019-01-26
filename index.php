@@ -1,17 +1,17 @@
 <?php
 /**
- * @package     Akaunting
- * @copyright   2017-2018 Akaunting. All rights reserved.
+ * @package     Bellva
+ * @copyright   2017-2018 Bellva. All rights reserved.
  * @license     GNU GPL version 3; see LICENSE.txt
- * @link        https://akaunting.com
+ * @link        https://Bellva.com
  */
 
 // Define minimum supported PHP version
-define('AKAUNTING_PHP', '5.6.4');
+define('Bellva_PHP', '5.6.4');
 
 // Check PHP version
-if (version_compare(PHP_VERSION, AKAUNTING_PHP, '<')) {
-    die('Your host needs to use PHP ' . AKAUNTING_PHP . ' or higher to run Akaunting');
+if (version_compare(PHP_VERSION, Bellva_PHP, '<')) {
+    die('Your host needs to use PHP ' . Bellva_PHP . ' or higher to run Bellva');
 }
 
 // Register the auto-loader

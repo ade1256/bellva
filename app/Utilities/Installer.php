@@ -177,7 +177,7 @@ class Installer
 
     public static function saveDbVariables($host, $port, $database, $username, $password)
     {
-        $prefix = strtolower(str_random(3) . '_');
+        // $prefix = strtolower(str_random(3) . '_');
 
         // Update .env file
         static::updateEnv([
@@ -186,7 +186,7 @@ class Installer
             'DB_DATABASE'   =>  $database,
             'DB_USERNAME'   =>  $username,
             'DB_PASSWORD'   =>  $password,
-            'DB_PREFIX'     =>  $prefix,
+            // 'DB_PREFIX'     =>  $prefix,
         ]);
 
         $con = env('DB_CONNECTION', 'mysql');
@@ -198,7 +198,7 @@ class Installer
         $db['database'] = $database;
         $db['username'] = $username;
         $db['password'] = $password;
-        $db['prefix'] = $prefix;
+        // $db['prefix'] = $prefix;
 
         Config::set('database.connections.' . $con, $db);
 

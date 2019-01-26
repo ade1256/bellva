@@ -142,6 +142,10 @@ class AdminMenu
                     if ($user->can('read-reports-profit-loss')) {
                         $sub->url('reports/profit-loss', trans('reports.profit_loss'), 5, $attr);
                     }
+                    if ($user->can('read-reports-profit-loss')) {
+                        $sub->url('reports/balance-sheet', trans('reports.balance_sheet'), 6, $attr);
+                    }
+                    
                 }, 6, [
                     'title' => trans_choice('general.reports', 2),
                     'icon' => 'fa fa-bar-chart',

@@ -6,7 +6,7 @@
 
     <!-- Content Header (Page header) -->
     <section class="content-header content-center">
-        @stack('content_header_start')
+      
 
         <h1>
             @yield('title')
@@ -20,7 +20,7 @@
             @endif
         </h1>
 
-        @stack('content_header_end')
+      
     </section>
 
     <!-- Main content -->

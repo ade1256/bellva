@@ -147,8 +147,16 @@
                             <tbody>
                                 @foreach($accounts as $item)
                                 <tr>
+                                    <!-- {{$item}} -->
                                     <td class="text-left">{{ $item->name }}</td>
-                                    <td class="text-right">@money($item->balance, $item->currency_code, true)</td>
+                                    <td class="text-right">
+                                    @if($item->balance < 0)
+                                        <span style="color:red">
+                                            @money($item->balance,$item->currency_code,true)    
+                                        </span>
+                                    @else
+                                        @money($item->balance,$item->currency_code,true)
+                                    @endif</td>
                                 </tr>
                                 @endforeach
                             </tbody>
