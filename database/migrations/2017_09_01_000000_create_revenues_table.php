@@ -17,7 +17,7 @@ class CreateRevenuesTable extends Migration
             $table->integer('company_id');
             $table->integer('account_id');
             $table->date('paid_at');
-            $table->double('amount', 15, 4);
+            $table->double('amount', 15, 0);
             $table->string('currency_code');
             $table->double('currency_rate', 15, 8);
             $table->integer('customer_id')->nullable();

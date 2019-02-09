@@ -19,7 +19,7 @@ class CreateInvoiceItemTaxesTable extends Migration
             $table->integer('invoice_item_id');
             $table->integer('tax_id');
             $table->string('name');
-            $table->double('amount', 15, 4)->default('0.0000');
+            $table->double('amount', 15, 0)->default('0.0000');
             $table->timestamps();
             $table->softDeletes();
 
