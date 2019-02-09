@@ -324,11 +324,10 @@ class ProfitLoss extends Controller
             $view_template = 'reports.balance_sheet.index';
         }
 
-        $tb_invoices = DB::table('invoices')->get();
-        $tb_revenues = DB::table('revenues')->get();
-        $tb_bills = DB::table('bills')->get();
-        $tb_payments = DB::table('payments')->get();
-
+        $tb_invoices = DB::table('invoices')->where('deleted_at', NULL)->get();
+        $tb_revenues = DB::table('revenues')->where('deleted_at', NULL)->get();
+        $tb_bills = DB::table('bills')->where('deleted_at', NULL)->get();
+        $tb_payments = DB::table('payments')->where('deleted_at', NULL)->get();
 
         return view($view_template,compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses', 'tb_invoices', 'tb_revenues', 'tb_bills', 'tb_payments'));
     }
