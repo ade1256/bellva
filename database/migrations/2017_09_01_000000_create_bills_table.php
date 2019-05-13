@@ -20,7 +20,7 @@ class CreateBillsTable extends Migration
             $table->string('bill_status_code');
             $table->date('billed_at');
             $table->date('due_at');
-            $table->double('amount', 15, 4);
+            $table->double('amount', 15, 0);
             $table->string('currency_code');
             $table->double('currency_rate', 15, 8);
             $table->integer('vendor_id');
@@ -46,9 +46,9 @@ class CreateBillsTable extends Migration
             $table->string('name');
             $table->string('sku')->nullable();
             $table->double('quantity', 7, 2);
-            $table->double('price', 15, 4);
-            $table->double('total', 15, 4);
-            $table->float('tax', 15, 4)->default('0.0000');
+            $table->double('price', 15, 0);
+            $table->double('total', 15, 0);
+            $table->float('tax', 15, 0)->default('0.0000');
             $table->integer('tax_id');
             $table->timestamps();
             $table->softDeletes();
@@ -73,7 +73,7 @@ class CreateBillsTable extends Migration
             $table->integer('bill_id');
             $table->integer('account_id');
             $table->date('paid_at');
-            $table->double('amount', 15, 4);
+            $table->double('amount', 15, 0);
             $table->string('currency_code');
             $table->double('currency_rate', 15, 8);
             $table->text('description')->nullable();
