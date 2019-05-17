@@ -196,6 +196,14 @@ class AdminMenu
                 ]);
             }
 
+            // Return Barang
+            $menu->add([
+                'url' => '/return-barang',
+                'title' => 'Return Barang',
+                'icon' => 'fa fa-truck',
+                'order' => 8,
+            ]);
+
            
 
             // Fire the event to extend the menu
