@@ -456,4 +456,9 @@ class Items extends Controller
 
         return $item->getConvertedAmount($format);
     }
+
+    public function returnBarang()
+    {
+        echo "asdasd";
+    }
 }

@@ -60,6 +60,8 @@ Route::group(['middleware' => 'language'], function () {
                 Route::get('search/search', 'Common\Search@search')->name('search.search');
                 Route::resource('search', 'Common\Search');
                 Route::post('notifications/disable', 'Common\Notifications@disable')->name('notifications.disable');
+                // Return Barang
+                Route::get('/return-barang', 'Common\Items@returnBarang');
             });
 
             Route::group(['prefix' => 'auth'], function () {
@@ -147,6 +149,7 @@ Route::group(['middleware' => 'language'], function () {
                 Route::resource('tax-summary', 'Reports\TaxSummary');
                 Route::resource('profit-loss', 'Reports\ProfitLoss');
                 Route::get('/balance-sheet', 'Reports\ProfitLoss@neraca');
+                
             });
 
             Route::group(['prefix' => 'settings'], function () {
@@ -167,6 +170,8 @@ Route::group(['middleware' => 'language'], function () {
                 Route::get('apps/{alias}', 'Settings\Modules@edit');
                 Route::patch('apps/{alias}', 'Settings\Modules@update');
             });
+
+            
 
             Route::group(['prefix' => 'apps'], function () {
                 Route::resource('token', 'Modules\Token');
