@@ -25,11 +25,11 @@ class Version112 extends Listener
             return;
         }
 
-        $locale = 'en-GB';
+        $locale = 'id-ID';
 
         // Get default locale if only 1 company
         if (Company::all()->count() == 1) {
-            $locale = setting('general.default_locale', 'en-GB');
+            $locale = setting('general.default_locale', 'id-ID');
         }
 
         // Set default locale
