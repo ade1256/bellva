@@ -331,4 +331,6 @@ class ProfitLoss extends Controller
 
         return view($view_template,compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses', 'tb_invoices', 'tb_revenues', 'tb_bills', 'tb_payments'));
     }
+
+   
 }

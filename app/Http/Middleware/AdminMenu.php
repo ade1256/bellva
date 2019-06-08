@@ -198,7 +198,7 @@ class AdminMenu
 
             // Return Barang
             $menu->add([
-                'url' => '/return-barang',
+                'url' => '/common/return-barang',
                 'title' => 'Return Barang',
                 'icon' => 'fa fa-truck',
                 'order' => 8,
